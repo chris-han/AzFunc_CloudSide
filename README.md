@@ -1,5 +1,5 @@
-# Sequence Diagrams
-## Eventhub_Flow_Notification.cs
+# Diagrams
+## Eventhub_Flow_Notification.cs sequence diagram
 ```mermaid
 sequenceDiagram
     participant EH as Event Hub
@@ -25,6 +25,43 @@ sequenceDiagram
     end
     AF->>AF: Handle exceptions
     deactivate AF
+
+```
+***
+## Eventhub_Flow_Notification.cs class diagram
+```mermaid
+classDiagram
+   class Eventhub_Flow_Notification {
+       +static Task Run([EventHubTrigger("eh-push-notification", Connection = "eh-east2_iothubroutes_workplace-safety-east2_EVENTHUB")] EventData[] events, ILogger log, ExecutionContext context)
+   }
+   class EventData {
+       -byte[] Body
+   }
+   class ILogger {
+       +void LogInformation(string message)
+   }
+   class ExecutionContext {
+       // No methods or properties specified
+   }
+   class HttpClient {
+       +async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
+   }
+   class HttpContent {
+       +string ContentType
+       +Stream CreateReadStream()
+   }
+   class StringContent {
+       +StringContent(string content, Encoding encoding, string contentType)
+   }
+   class HttpResponseMessage {
+       +bool EnsureSuccessStatusCode()
+   }
+   Eventhub_Flow_Notification --> HttpClient : uses
+   Eventhub_Flow_Notification --> HttpContent : uses
+   Eventhub_Flow_Notification --> StringContent : uses
+   Eventhub_Flow_Notification --> HttpResponseMessage : uses
+   Eventhub_Flow_Notification --> ILogger : uses
+   Eventhub_Flow_Notification --> ExecutionContext : uses
 
 ```
 ***
